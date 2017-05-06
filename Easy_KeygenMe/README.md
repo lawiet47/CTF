@@ -8,8 +8,18 @@ first the program asks us to input the key. Then moves 10h, 20h, 30h values to t
 
 ![_keygen_loop](https://cloud.githubusercontent.com/assets/27059441/25770804/0a5881ea-3248-11e7-947e-ab7ab657990a.PNG)
 
-Seems like a loop. So what this loop does is that it compares the esi to the value 3 if it is greater than or equal to 3 it will break. Then it moves some values to the ecx and edx registers we see that the addresses which the values are located in are changing depending on the esi and ebp. If you look at the stack you will see values 10h,20h,30h are located at address [esp+ebp+13ch+var_12c] and the key we entered is located at the address [esp+ebp+13ch+var_130]. Then ecx and the edx are being subjected to xor operation. Then the ebp and the esi are incremented in order to get the next addresses of the array([10h,20h,30h])
-and the input respectively. This operation continues until we xor all of the elements of the input.
+Seems like a loop. So what this loop does is that it compares the esi to the value 3 if it is greater than or equal to 3 it will break. Then it moves some values to the ecx and edx registers we see that the addresses which the values are located in are changing depending on the esi and ebp. If you look at the stack you will see values 10h,20h,30h.
+
+![_keygen_stack](https://cloud.githubusercontent.com/assets/27059441/25771649/2325760c-3260-11e7-8405-61836695c57b.PNG)
+
+
+Then ecx and the edx are being subjected to xor operation. The ebp and the esi are incremented in order to get the next addresses of the array([10h,20h,30h]). After that, program stores the xor'ed values in some location on the stack.This is the case when we enter AAAAAAAAAAAAAAAA for the input every so the '\x41'xor10='\x51'(in ascii 5=>35 1=>31)
+
+![_keygen_stack_serial](https://cloud.githubusercontent.com/assets/27059441/25771678/d1353d4a-3260-11e7-91cd-2f7e55e758a3.PNG)
+
+So we see the values 35 and 31 on the stack.
+
+This operation continues until we xor all of the elements of the input and store them on the stack.
 Then the program jumps to a place where the serial is being asked to input
 
 ![_keygen_fscanf2](https://cloud.githubusercontent.com/assets/27059441/25770901/bc3166f0-324a-11e7-8c5e-ea3d3b1abb13.PNG)
